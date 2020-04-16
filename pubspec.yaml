@@ -1,0 +1,8 @@
+name: change_app_package_name
+description: Change app package name with one command.
+version: 0.1.0
+maintainer: Atiq Samtia (@AtiqSamtia)
+homepage: https://github.com/atiqsamtia/change_app_package_name
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
