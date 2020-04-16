@@ -59,7 +59,7 @@ class AndroidRenameSteps {
       await File(javaPath).rename(newJavaPath);
 
       print('Deleting old directories');
-      deleteOldDirectories('java', oldPackageName, PATH_ACTIVITY);
+      await deleteOldDirectories('java', oldPackageName, PATH_ACTIVITY);
     } else {
       print('Project is using kotlin');
       print('Updating MainActivity.kt');
@@ -70,7 +70,7 @@ class AndroidRenameSteps {
       await File(kotlinPath).rename(newKotlinPath);
 
       print('Deleting old directories');
-      deleteOldDirectories('kotlin', oldPackageName, PATH_ACTIVITY);
+      await deleteOldDirectories('kotlin', oldPackageName, PATH_ACTIVITY);
     }
   }
 

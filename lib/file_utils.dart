@@ -28,7 +28,7 @@ Future<void> deleteOldDirectories(String lang, String oldPackage, String basePat
   for (int i = 0; i < reversed.length; i++) {
     String path = '$basePath$lang/' + dirList.join('/');
 
-    if (Directory(path).listSync().toList().length == 0) {
+    if (Directory(path).listSync().toList().isEmpty) {
       Directory(path).deleteSync();
     }
     dirList.removeLast();
