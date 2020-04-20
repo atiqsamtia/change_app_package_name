@@ -5,3 +5,7 @@
 ## [0.1.1] - (March 16, 2020)
 
 * Update code as per pub.dev guidelines
+
+## [0.1.2] - (March 16, 2020)
+
+* Bug Fix in README.md
