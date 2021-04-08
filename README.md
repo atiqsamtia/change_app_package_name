@@ -10,11 +10,18 @@ Change App Package Name with single command. It makes the process very easy and 
 
 ## How to Use?
 
-Add Change App Package Name to your `pubspec.yaml` in `dev_dependencies:` section
+Add Change App Package Name to your `pubspec.yaml` in `dev_dependencies:` section if your project migrate to null safety use this. 
+```yaml
+dev_dependencies: 
+  change_app_package_name: ^1.0.0
+```
+
+Add  Change App Package Name to your `pubspec.yaml` in `dev_dependencies:` section if your project not migrate to null safety use this. 
 ```yaml
 dev_dependencies: 
   change_app_package_name: ^0.1.3
 ```
+
 
 Update dependencies 
 ```
