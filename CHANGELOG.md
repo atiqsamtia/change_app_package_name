@@ -13,3 +13,7 @@
 ## [0.1.3] - (April 08, 2021)
 
 * Add extra Files checks. Hopefully fixes #7
+
+## [1.0.0] - (April 08, 2021)
+
+* Added null safety. 

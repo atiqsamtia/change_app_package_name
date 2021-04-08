@@ -4,7 +4,7 @@ import './file_utils.dart';
 
 class AndroidRenameSteps {
   final String newPackageName;
-  String oldPackageName;
+  String? oldPackageName;
 
   static const String PATH_BUILD_GRADLE = 'android/app/build.gradle';
   static const String PATH_MANIFEST = 'android/app/src/main/AndroidManifest.xml';
@@ -21,11 +21,11 @@ class AndroidRenameSteps {
           '\n\nrun " flutter create . " to regenerate missing files.');
       return;
     }
-    String contents = await readFileAsString(PATH_BUILD_GRADLE);
+    String? contents = await readFileAsString(PATH_BUILD_GRADLE);
 
     var reg = RegExp('applicationId "(.*)"', caseSensitive: true, multiLine: false);
 
-    var name = reg.firstMatch(contents).group(1);
+    var name = reg.firstMatch(contents!)!.group(1);
     oldPackageName = name;
 
     print("Old Package Name: $oldPackageName");
@@ -46,7 +46,7 @@ class AndroidRenameSteps {
   }
 
   Future<void> updateMainActivity() async {
-    String oldPackagePath = oldPackageName.replaceAll('.', '/');
+    String oldPackagePath = oldPackageName!.replaceAll('.', '/');
     String javaPath = PATH_ACTIVITY + 'java/$oldPackagePath/MainActivity.java';
     String kotlinPath = PATH_ACTIVITY + 'kotlin/$oldPackagePath/MainActivity.kt';
 
@@ -64,7 +64,7 @@ class AndroidRenameSteps {
       await File(javaPath).rename(newJavaPath);
 
       print('Deleting old directories');
-      await deleteOldDirectories('java', oldPackageName, PATH_ACTIVITY);
+      await deleteOldDirectories('java', oldPackageName!, PATH_ACTIVITY);
     } else if (await File(kotlinPath).exists()) {
       print('Project is using kotlin');
       print('Updating MainActivity.kt');
@@ -75,7 +75,7 @@ class AndroidRenameSteps {
       await File(kotlinPath).rename(newKotlinPath);
 
       print('Deleting old directories');
-      await deleteOldDirectories('kotlin', oldPackageName, PATH_ACTIVITY);
+      await deleteOldDirectories('kotlin', oldPackageName!, PATH_ACTIVITY);
     } else {
       print('ERROR:: Unknown Directory structure, both java & kotlin files not found.');
     }
