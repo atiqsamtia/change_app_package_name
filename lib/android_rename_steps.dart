@@ -16,6 +16,11 @@ class AndroidRenameSteps {
   AndroidRenameSteps(this.newPackageName);
 
   Future<void> process() async {
+    if (!await File(PATH_BUILD_GRADLE).exists()) {
+      print('ERROR:: build.gradle file not found, Check if you have a correct android directory present in your project'
+          '\n\nrun " flutter create . " to regenerate missing files.');
+      return;
+    }
     String contents = await readFileAsString(PATH_BUILD_GRADLE);
 
     var reg = RegExp('applicationId "(.*)"', caseSensitive: true, multiLine: false);
@@ -60,7 +65,7 @@ class AndroidRenameSteps {
 
       print('Deleting old directories');
       await deleteOldDirectories('java', oldPackageName, PATH_ACTIVITY);
-    } else {
+    } else if (await File(kotlinPath).exists()) {
       print('Project is using kotlin');
       print('Updating MainActivity.kt');
       await _replace(kotlinPath);
@@ -71,6 +76,8 @@ class AndroidRenameSteps {
 
       print('Deleting old directories');
       await deleteOldDirectories('kotlin', oldPackageName, PATH_ACTIVITY);
+    } else {
+      print('ERROR:: Unknown Directory structure, both java & kotlin files not found.');
     }
   }
 
