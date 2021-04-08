@@ -1,7 +1,7 @@
 import 'dart:io';
 
 Future<void> replaceInFile(String path, oldPackage, newPackage) async {
-  String contents = await readFileAsString(path);
+  String? contents = await readFileAsString(path);
   if(contents == null){
     print('ERROR:: file at $path not found');
     return;
@@ -10,9 +10,9 @@ Future<void> replaceInFile(String path, oldPackage, newPackage) async {
   await writeFileFromString(path, contents);
 }
 
-Future<String> readFileAsString(String path) async {
+Future<String?> readFileAsString(String path) async {
   var file = File(path);
-  String contents;
+  String? contents;
 
   if (await file.exists()) {
     contents = await file.readAsString();
