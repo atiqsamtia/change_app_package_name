@@ -17,3 +17,7 @@
 ## [1.0.0] - (April 08, 2021)
 
 * Added null safety. 
+
+## [1.1.0] - (April 08, 2021)
+
+* Change MainActivity mechanism to handle different locations.
