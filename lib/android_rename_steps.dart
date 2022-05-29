@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import './file_utils.dart';
@@ -33,55 +34,87 @@ class AndroidRenameSteps {
     print('Updating build.gradle File');
     await _replace(PATH_BUILD_GRADLE);
 
+    var mText = 'package="$newPackageName">';
+    var mRegex = '(package.*)';
+
     print('Updating Main Manifest file');
-    await _replace(PATH_MANIFEST);
+    await replaceInFileRegex(PATH_MANIFEST, mRegex, mText);
 
     print('Updating Debug Manifest file');
-    await _replace(PATH_MANIFEST_DEBUG);
+    await replaceInFileRegex(PATH_MANIFEST_DEBUG, mRegex, mText);
 
     print('Updating Profile Manifest file');
-    await _replace(PATH_MANIFEST_PROFILE);
+    await replaceInFileRegex(PATH_MANIFEST_PROFILE, mRegex, mText);
 
     await updateMainActivity();
   }
 
   Future<void> updateMainActivity() async {
-    String oldPackagePath = oldPackageName!.replaceAll('.', '/');
-    String javaPath = PATH_ACTIVITY + 'java/$oldPackagePath/MainActivity.java';
-    String kotlinPath = PATH_ACTIVITY + 'kotlin/$oldPackagePath/MainActivity.kt';
+    var path = await findMainActivity(type: 'java');
+    if (path != null) {
+      processMainActivity(path, 'java');
+    }
+
+    path = await findMainActivity(type: 'kotlin');
+    if (path != null) {
+      processMainActivity(path, 'kotlin');
+    }
+  }
+
+  Future<void> processMainActivity(File path, String type) async {
+    var extension = type == 'java' ? 'java' : 'kt';
+    print('Project is using $type');
+    print('Updating MainActivity.$extension');
+    await replaceInFileRegex(path.path, '(package.*)', "package ${newPackageName}");
 
     String newPackagePath = newPackageName.replaceAll('.', '/');
-    String newJavaPath = PATH_ACTIVITY + 'java/$newPackagePath/MainActivity.java';
-    String newKotlinPath = PATH_ACTIVITY + 'kotlin/$newPackagePath/MainActivity.kt';
+    String newPath = '${PATH_ACTIVITY}${type}/$newPackagePath';
 
-    if (await File(javaPath).exists()) {
-      print('Project is using Java');
-      print('Updating MainActivity.java');
-      await _replace(javaPath);
+    print('Creating New Directory Structure');
+    await Directory(newPath).create(recursive: true);
+    await path.rename(newPath + '/MainActivity.$extension');
 
-      print('Creating New Directory Structure');
-      await Directory(PATH_ACTIVITY + 'java/$newPackagePath').create(recursive: true);
-      await File(javaPath).rename(newJavaPath);
+    print('Deleting old directories');
 
-      print('Deleting old directories');
-      await deleteOldDirectories('java', oldPackageName!, PATH_ACTIVITY);
-    } else if (await File(kotlinPath).exists()) {
-      print('Project is using kotlin');
-      print('Updating MainActivity.kt');
-      await _replace(kotlinPath);
-
-      print('Creating New Directory Structure');
-      await Directory(PATH_ACTIVITY + 'kotlin/$newPackagePath').create(recursive: true);
-      await File(kotlinPath).rename(newKotlinPath);
-
-      print('Deleting old directories');
-      await deleteOldDirectories('kotlin', oldPackageName!, PATH_ACTIVITY);
-    } else {
-      print('ERROR:: Unknown Directory structure, both java & kotlin files not found.');
-    }
+    await deleteEmptyDirs(type);
   }
 
   Future<void> _replace(String path) async {
     await replaceInFile(path, oldPackageName, newPackageName);
+  }
+
+  Future<void> deleteEmptyDirs(String type) async {
+    var dirs = await dirContents(Directory(PATH_ACTIVITY + type));
+    dirs = dirs.reversed.toList();
+    for (var dir in dirs) {
+      if (dir is Directory) {
+        if (dir.listSync().toList().isEmpty) {
+          dir.deleteSync();
+        }
+      }
+    }
+  }
+
+  Future<File?> findMainActivity({String type: 'java'}) async {
+    var files = await dirContents(Directory(PATH_ACTIVITY + type));
+    String extension = type == 'java' ? 'java' : 'kt';
+    for (var item in files) {
+      if (item is File) {
+        if (item.path.endsWith('MainActivity.' + extension)) {
+          return item;
+        }
+      }
+    }
+    return null;
+  }
+
+  Future<List<FileSystemEntity>> dirContents(Directory dir) {
+    var files = <FileSystemEntity>[];
+    var completer = Completer<List<FileSystemEntity>>();
+    var lister = dir.list(recursive: true);
+    lister.listen((file) => files.add(file),
+        // should also register onError
+        onDone: () => completer.complete(files));
+    return completer.future;
   }
 }

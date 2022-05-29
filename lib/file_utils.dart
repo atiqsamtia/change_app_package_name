@@ -10,6 +10,16 @@ Future<void> replaceInFile(String path, oldPackage, newPackage) async {
   await writeFileFromString(path, contents);
 }
 
+Future<void> replaceInFileRegex(String path, regex, replacement) async {
+  String? contents = await readFileAsString(path);
+  if(contents == null){
+    print('ERROR:: file at $path not found');
+    return;
+  }
+  contents = contents.replaceAll(RegExp(regex), replacement);
+  await writeFileFromString(path, contents);
+}
+
 Future<String?> readFileAsString(String path) async {
   var file = File(path);
   String? contents;
