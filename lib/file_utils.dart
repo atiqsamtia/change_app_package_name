@@ -1,8 +1,9 @@
 import 'dart:io';
 
+/// [replaceInFile] this method get a file address and tray replace old package name to new package name  in this file .
 Future<void> replaceInFile(String path, oldPackage, newPackage) async {
   String? contents = await readFileAsString(path);
-  if(contents == null){
+  if (contents == null) {
     print('ERROR:: file at $path not found');
     return;
   }
@@ -10,9 +11,10 @@ Future<void> replaceInFile(String path, oldPackage, newPackage) async {
   await writeFileFromString(path, contents);
 }
 
+/// [replaceInFileRegex] this method get a file address and tray replace specific regex to specific string value .
 Future<void> replaceInFileRegex(String path, regex, replacement) async {
   String? contents = await readFileAsString(path);
-  if(contents == null){
+  if (contents == null) {
     print('ERROR:: file at $path not found');
     return;
   }
@@ -20,6 +22,7 @@ Future<void> replaceInFileRegex(String path, regex, replacement) async {
   await writeFileFromString(path, contents);
 }
 
+/// [readFileAsString] this method return file content as an string value .
 Future<String?> readFileAsString(String path) async {
   var file = File(path);
   String? contents;
@@ -30,21 +33,8 @@ Future<String?> readFileAsString(String path) async {
   return contents;
 }
 
+/// [writeFileFromString] this method write specific content to specific file .
 Future<void> writeFileFromString(String path, String contents) async {
   var file = File(path);
   await file.writeAsString(contents);
-}
-
-Future<void> deleteOldDirectories(String lang, String oldPackage, String basePath) async {
-  var dirList = oldPackage.split('.');
-  var reversed = dirList.reversed.toList();
-
-  for (int i = 0; i < reversed.length; i++) {
-    String path = '$basePath$lang/' + dirList.join('/');
-
-    if (Directory(path).listSync().toList().isEmpty) {
-      Directory(path).deleteSync();
-    }
-    dirList.removeLast();
-  }
 }
