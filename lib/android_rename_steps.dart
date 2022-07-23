@@ -65,7 +65,7 @@ class AndroidRenameSteps {
     var extension = type == 'java' ? 'java' : 'kt';
     print('Project is using $type');
     print('Updating MainActivity.$extension');
-    await replaceInFileRegex(path.path, '(^package .*\$)', "package ${newPackageName}");
+    await replaceInFileRegex(path.path, r'(^package .*$)', "package ${newPackageName}");
 
     String newPackagePath = newPackageName.replaceAll('.', '/');
     String newPath = '${PATH_ACTIVITY}${type}/$newPackagePath';
