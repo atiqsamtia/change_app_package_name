@@ -53,12 +53,12 @@ class AndroidRenameSteps {
     var files = await findActivities(type: 'java');
 
     for (var file in files) {
-      processActivities(file, 'java');
+      await processActivities(file, 'java');
     }
 
     files = await findActivities(type: 'kotlin');
     for (var file in files) {
-      processActivities(file, 'kotlin');
+      await processActivities(file, 'kotlin');
     }
   }
 
