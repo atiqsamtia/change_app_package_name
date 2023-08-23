@@ -89,6 +89,7 @@ class AndroidRenameSteps {
     dirs = dirs.reversed.toList();
     for (var dir in dirs) {
       if (dir is Directory) {
+        print(dir.path);
         if (dir.existsSync() && dir.listSync().toList().isEmpty) {
           dir.deleteSync();
         }
@@ -102,7 +103,7 @@ class AndroidRenameSteps {
     final List<File> filesToReturn = [];
     for (var item in files) {
       if (item is File) {
-        if (item.path.endsWith(extension)) {
+        if (item.path.endsWith('.' +extension)) {
           filesToReturn.add(item);
         }
       }
