@@ -89,7 +89,6 @@ class AndroidRenameSteps {
     dirs = dirs.reversed.toList();
     for (var dir in dirs) {
       if (dir is Directory) {
-        print(dir.path);
         if (dir.existsSync() && dir.listSync().toList().isEmpty) {
           dir.deleteSync();
         }
@@ -104,6 +103,8 @@ class AndroidRenameSteps {
     for (var item in files) {
       if (item is File) {
         String? oldPackagePath = oldPackageName?.replaceAll('.', '/');
+        print("old packagePath: $oldPackagePath");
+        print("item path: ${item.path}");
         if (oldPackagePath != null && item.path.contains(oldPackagePath) && item.path.endsWith('.' +extension)) {
           filesToReturn.add(item);
         }
