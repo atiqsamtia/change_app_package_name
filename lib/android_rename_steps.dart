@@ -89,7 +89,7 @@ class AndroidRenameSteps {
     dirs = dirs.reversed.toList();
     for (var dir in dirs) {
       if (dir is Directory) {
-        if (dir.listSync().toList().isEmpty) {
+        if (dir.existsSync() && dir.listSync().toList().isEmpty) {
           dir.deleteSync();
         }
       }
