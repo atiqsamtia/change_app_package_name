@@ -103,8 +103,6 @@ class AndroidRenameSteps {
     for (var item in files) {
       if (item is File) {
         String? oldPackagePath = oldPackageName?.replaceAll('.', '/');
-        print("old packagePath: $oldPackagePath");
-        print("item path: ${item.path}");
         if (oldPackagePath != null && item.path.contains(oldPackagePath) && item.path.endsWith('.' +extension)) {
           filesToReturn.add(item);
         }
