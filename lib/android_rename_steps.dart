@@ -113,6 +113,7 @@ class AndroidRenameSteps {
   }
 
   Future<List<FileSystemEntity>> dirContents(Directory dir) {
+    if(!dir.existsSync()) return Future.value([]);
     var files = <FileSystemEntity>[];
     var completer = Completer<List<FileSystemEntity>>();
     var lister = dir.list(recursive: true);
