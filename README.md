@@ -33,7 +33,7 @@ flutter pub get
 Run this command to change the package name.
 
 ```
-flutter pub run change_app_package_name:main com.new.package.name
+dart run change_app_package_name:main com.new.package.name
 ```
 Where `com.new.package.name` is the new package name that you want for your app. replace it with any name you want.
 
