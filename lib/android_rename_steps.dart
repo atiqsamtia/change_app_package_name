@@ -35,7 +35,7 @@ class AndroidRenameSteps {
     await _replace(PATH_BUILD_GRADLE);
 
     var mText = 'package="$newPackageName">';
-    var mRegex = '(package.*)';
+    var mRegex = '(package=.*)';
 
     print('Updating Main Manifest file');
     await replaceInFileRegex(PATH_MANIFEST, mRegex, mText);
