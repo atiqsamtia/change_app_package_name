@@ -21,3 +21,10 @@
 ## [1.1.0] - (April 08, 2021)
 
 * Change MainActivity mechanism to handle different locations.
+
+## [1.2.0] - (Jun 03, 2024)
+
+* Support Flutter 3.22.0
+* Fix regex to only replace package name in manifest files
+* Fix #26 where kotlin directory does not exist so it should not throw error.
+* add extra check to make sure the old application id is found before proceeding to next steps.
