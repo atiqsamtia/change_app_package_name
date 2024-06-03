@@ -24,7 +24,7 @@ class AndroidRenameSteps {
     }
     String? contents = await readFileAsString(PATH_BUILD_GRADLE);
 
-    var reg = RegExp('applicationId "(.*)"', caseSensitive: true, multiLine: false);
+    var reg = RegExp('applicationId = "(.*)"', caseSensitive: true, multiLine: false);
 
     var name = reg.firstMatch(contents!)!.group(1);
     oldPackageName = name;
