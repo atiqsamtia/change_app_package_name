@@ -7,13 +7,15 @@ Change App Package Name with single command. It makes the process very easy and 
 - [x] Update MainActivity file. Both java & kotlin supported.
 - [x] Move MainActivity file to new package directory structure
 - [x] Delete old package name directory structure.
+- [x] Update Product Bundle Identifier in iOS.
+  - if you have customized CFBundleIdentifier in Info.plist, it will not be updated. You have to update it manually.
 
 ## How to Use?
 
 Add Change App Package Name to your `pubspec.yaml` in `dev_dependencies:` section. 
 ```yaml
 dev_dependencies: 
-  change_app_package_name: ^1.2.0
+  change_app_package_name: ^1.3.0
 ```
 or run this command
 ```bash
