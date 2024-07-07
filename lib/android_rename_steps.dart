@@ -17,6 +17,7 @@ class AndroidRenameSteps {
   AndroidRenameSteps(this.newPackageName);
 
   Future<void> process() async {
+    print("Running for android");
     if (!await File(PATH_BUILD_GRADLE).exists()) {
       print('ERROR:: build.gradle file not found, Check if you have a correct android directory present in your project'
           '\n\nrun " flutter create . " to regenerate missing files.');
@@ -51,6 +52,7 @@ class AndroidRenameSteps {
     await replaceInFileRegex(PATH_MANIFEST_PROFILE, mRegex, mText);
 
     await updateMainActivity();
+    print('Finished updating android package name');
   }
 
   Future<void> updateMainActivity() async {
