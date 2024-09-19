@@ -102,7 +102,7 @@ class AndroidRenameSteps {
     }
   }
 
-  Future<File?> findMainActivity({String type: 'java'}) async {
+  Future<File?> findMainActivity({String type = 'java'}) async {
     var files = await dirContents(Directory(PATH_ACTIVITY + type));
     String extension = type == 'java' ? 'java' : 'kt';
     for (var item in files) {
