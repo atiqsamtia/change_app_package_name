@@ -1,0 +1,55 @@
+name: Test Package Functionality
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test_package_functionality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Create a new Flutter project
+        run: |
+          flutter create test_app
+          cd test_app
+
+      - name: Add your package to pubspec.yaml
+        run: |
+          cd test_app
+          sed -i '/dev_dependencies:/a\  change_app_package_name:\n    path: ../' pubspec.yaml
+
+      - name: Get dependencies
+        run: |
+          cd test_app
+          flutter pub get
+
+      - name: Run package rename command
+        run: |
+          cd test_app
+          flutter pub run change_app_package_name:main com.new.package.name
+
+      - name: Check Android files
+        run: |
+          cd test_app
+          grep -q "applicationId = \"com.new.package.name\"" android/app/build.gradle || exit 1
+          grep -q "package com.new.package.name" android/app/src/main/kotlin/com/new/package/name/MainActivity.kt || exit 1
+
+      - name: Check iOS files
+        run: |
+          cd test_app
+          grep -q "PRODUCT_BUNDLE_IDENTIFIER = com.new.package.name" ios/Runner.xcodeproj/project.pbxproj || exit 1
+
+      - name: Run Flutter analyze
+        run: |
+          cd test_app
+          flutter analyze
