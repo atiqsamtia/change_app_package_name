@@ -1,3 +1,7 @@
+## [1.4.0] - (September 20, 2024)
+
+* Specify which platform they want to rename the package for. Thanks [@moha-b](moha-b) #43
+
 ## [1.3.0] - (July 08, 2024)
 
 * iOS support added
