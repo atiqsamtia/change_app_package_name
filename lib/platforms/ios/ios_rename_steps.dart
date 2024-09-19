@@ -1,7 +1,4 @@
-import 'dart:async';
-import 'dart:io';
-
-import './file_utils.dart';
+part of 'ios.dart';
 
 class IosRenameSteps {
   final String newPackageName;

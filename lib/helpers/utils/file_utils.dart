@@ -1,4 +1,5 @@
-import 'dart:io';
+part of 'utils.dart';
+
 
 Future<void> replaceInFile(String path, oldPackage, newPackage) async {
   String? contents = await readFileAsString(path);

@@ -1,7 +1,6 @@
 library change_app_package_name;
 
-import './android_rename_steps.dart';
-import './ios_rename_steps.dart';
+import 'platforms/platforms.dart';
 
 class ChangeAppPackageName {
   static Future<void> start(List<String> arguments) async {
