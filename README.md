@@ -44,8 +44,12 @@ To rename only Android:
 ```
 dart run change_app_package_name:main com.new.package.name --android
 ```
->![Note]
-> jskaf;jasfdk;l
+>[!NOTE]
+> Kotlin treats is, in, and as keywords, which can conflict with some package names.
+> So if your package name is like `com.is.example`
+> ``` 
+> package `is`.example
+> ```
 
 To rename only IOS:
 ```
