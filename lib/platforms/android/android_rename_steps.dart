@@ -1,7 +1,4 @@
-import 'dart:async';
-import 'dart:io';
-
-import './file_utils.dart';
+part of 'android.dart';
 
 class AndroidRenameSteps {
   final String newPackageName;
@@ -71,8 +68,12 @@ class AndroidRenameSteps {
     var extension = type == 'java' ? 'java' : 'kt';
     print('Project is using $type');
     print('Updating MainActivity.$extension');
+
+    // Use the extension method to escape Kotlin keywords
+    var escapedPackageName = newPackageName.escapeKotlinKeywords();
+
     await replaceInFileRegex(
-        path.path, r'^(package (?:\.|\w)+)', "package ${newPackageName}");
+        path.path, r'^(package (?:\.|\w)+)', "package $escapedPackageName");
 
     String newPackagePath = newPackageName.replaceAll('.', '/');
     String newPath = '${PATH_ACTIVITY}${type}/$newPackagePath';
@@ -82,9 +83,9 @@ class AndroidRenameSteps {
     await path.rename(newPath + '/MainActivity.$extension');
 
     print('Deleting old directories');
-
     await deleteEmptyDirs(type);
   }
+
 
   Future<void> _replace(String path) async {
     await replaceInFile(path, oldPackageName, newPackageName);

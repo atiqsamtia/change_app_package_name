@@ -31,13 +31,13 @@
 build/
 
 # Android related
-**/android/**/gradle-wrapper.jar
-**/android/.gradle
-**/android/captures/
-**/android/gradlew
-**/android/gradlew.bat
-**/android/local.properties
-**/android/**/GeneratedPluginRegistrant.java
+lib/platforms/android/**/gradle-wrapper.jar
+lib/platforms/android/.gradle
+lib/platforms/android/captures/
+lib/platforms/android/gradlew
+lib/platforms/android/gradlew.bat
+lib/platforms/android/local.properties
+lib/platforms/android/**/GeneratedPluginRegistrant.java
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
@@ -45,31 +45,31 @@ build/
 **/ios/**/*.moved-aside
 **/ios/**/*.pbxuser
 **/ios/**/*.perspectivev3
-**/ios/**/*sync/
-**/ios/**/.sconsign.dblite
-**/ios/**/.tags*
-**/ios/**/.vagrant/
-**/ios/**/DerivedData/
-**/ios/**/Icon?
-**/ios/**/Pods/
-**/ios/**/.symlinks/
-**/ios/**/profile
-**/ios/**/xcuserdata
-**/ios/.generated/
-**/ios/Flutter/App.framework
-**/ios/Flutter/Flutter.framework
-**/ios/Flutter/Flutter.podspec
-**/ios/Flutter/Generated.xcconfig
-**/ios/Flutter/app.flx
-**/ios/Flutter/app.zip
-**/ios/Flutter/flutter_assets/
-**/ios/Flutter/flutter_export_environment.sh
-**/ios/ServiceDefinitions.json
-**/ios/Runner/GeneratedPluginRegistrant.*
+lib/platforms/ios/**/*sync/
+lib/platforms/ios/**/.sconsign.dblite
+lib/platforms/ios/**/.tags*
+lib/platforms/ios/**/.vagrant/
+lib/platforms/ios/**/DerivedData/
+lib/platforms/ios/**/Icon?
+lib/platforms/ios/**/Pods/
+lib/platforms/ios/**/.symlinks/
+lib/platforms/ios/**/profile
+lib/platforms/ios/**/xcuserdata
+lib/platforms/ios/.generated/
+lib/platforms/ios/Flutter/App.framework
+lib/platforms/ios/Flutter/Flutter.framework
+lib/platforms/ios/Flutter/Flutter.podspec
+lib/platforms/ios/Flutter/Generated.xcconfig
+lib/platforms/ios/Flutter/app.flx
+lib/platforms/ios/Flutter/app.zip
+lib/platforms/ios/Flutter/flutter_assets/
+lib/platforms/ios/Flutter/flutter_export_environment.sh
+lib/platforms/ios/ServiceDefinitions.json
+lib/platforms/ios/Runner/GeneratedPluginRegistrant.*
 
 # Exceptions to above rules.
-!**/ios/**/default.mode1v3
-!**/ios/**/default.mode2v3
-!**/ios/**/default.pbxuser
-!**/ios/**/default.perspectivev3
+!lib/platforms/ios/**/default.mode1v3
+!lib/platforms/ios/**/default.mode2v3
+!lib/platforms/ios/**/default.pbxuser
+!lib/platforms/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
