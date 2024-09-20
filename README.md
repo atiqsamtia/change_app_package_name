@@ -10,13 +10,15 @@ Change App Package Name with single command. It makes the process very easy and 
 - [x] Update Product Bundle Identifier in iOS.
   - if you have customized CFBundleIdentifier in Info.plist, it will not be updated. You have to update it manually.
 - [x] Specify which platform they want to rename the package for.
+- [x] Handles Kotlin reserved keywords in package names
+- [ ] Windows support
 
 ## How to Use?
 
 Add Change App Package Name to your `pubspec.yaml` in `dev_dependencies:` section. 
 ```yaml
 dev_dependencies: 
-  change_app_package_name: ^1.4.0
+  change_app_package_name: ^1.4.1
 ```
 or run this command
 ```bash
@@ -25,7 +27,7 @@ flutter pub add -d change_app_package_name
 Not migrated to null safety yet? use old version like this
 ```yaml
 dev_dependencies: 
-  change_app_package_name: ^1.4.0
+  change_app_package_name: ^1.4.1
 ```
 
 
@@ -42,6 +44,9 @@ To rename only Android:
 ```
 dart run change_app_package_name:main com.new.package.name --android
 ```
+>![Note]
+> jskaf;jasfdk;l
+
 To rename only IOS:
 ```
 dart run change_app_package_name:main com.new.package.name --ios
