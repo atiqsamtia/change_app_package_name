@@ -49,6 +49,14 @@ dart run change_app_package_name:main com.new.package.name --ios
 
 Where `com.new.package.name` is the new package name that you want for your app. replace it with any name you want.
 
+If you don't want to move Android activity files to new directory associated with package name (default action) use command `--rename-only`:
+```
+dart run change_app_package_name:main com.new.package.name --rename-only
+```
+or
+```
+dart run change_app_package_name:main com.new.package.name --android --rename-only
+```
 ## Meta
 
 Atiq Samtia– [@AtiqSamtia](https://twitter.com/atiqsamtia) – me@atiqsamtia.com
