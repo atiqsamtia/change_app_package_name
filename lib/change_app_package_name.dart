@@ -13,26 +13,43 @@ class ChangeAppPackageName {
     if (arguments.length == 1) {
       // No platform-specific flag, rename both Android and iOS
       print('Renaming package for both Android and iOS.');
-      await _renameBoth(arguments[0]);
-    } else if (arguments.length == 2) {
+      return await _renameBoth(arguments.first);
+    }
+    if (arguments.length <= 3) {
       // Check for platform-specific flags
-      var platform = arguments[1].toLowerCase();
-      if (platform == '--android') {
+      final argument1 = arguments.elementAt(1).toLowerCase();
+      final argument2 = arguments.elementAtOrNull(2)?.toLowerCase();
+      if (argument1 == '--android') {
         print('Renaming package for Android only.');
-        await AndroidRenameSteps(arguments[0]).process();
-      } else if (platform == '--ios') {
-        print('Renaming package for iOS only.');
-        await IosRenameSteps(arguments[0]).process();
-      } else {
-        print('Invalid argument. Use "--android" or "--ios".');
+        final isRenameOnly = argument2 == '--rename-only';
+        return await AndroidRenameSteps(
+          newPackageName: arguments.first,
+          updateActivityFiles: !isRenameOnly,
+        ).process();
       }
+      if (argument1 == '--ios') {
+        print('Renaming package for iOS only.');
+        return await IosRenameSteps(arguments.first).process();
+      }
+
+      if (argument1 == '--rename-only') {
+        return await _renameBoth(arguments.first, false);
+      }
+
+      print('Invalid argument. Use "--android" or "--ios".');
     } else {
       print('Too many arguments. This package accepts only the new package name and an optional platform flag.');
     }
   }
 
-  static Future<void> _renameBoth(String newPackageName) async {
-    await AndroidRenameSteps(newPackageName).process();
+  static Future<void> _renameBoth(
+    String newPackageName, [
+    bool updateActivityFiles = true,
+  ]) async {
+    await AndroidRenameSteps(
+      newPackageName: newPackageName,
+      updateActivityFiles: updateActivityFiles,
+    ).process();
     await IosRenameSteps(newPackageName).process();
   }
 }

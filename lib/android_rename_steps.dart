@@ -3,9 +3,9 @@ import 'dart:io';
 
 import './file_utils.dart';
 
-class AndroidRenameSteps {
+final class AndroidRenameSteps {
   final String newPackageName;
-  String? oldPackageName;
+  final bool updateActivityFiles;
 
   static const String PATH_BUILD_GRADLE = 'android/app/build.gradle';
   static const String PATH_MANIFEST = 'android/app/src/main/AndroidManifest.xml';
@@ -14,7 +14,10 @@ class AndroidRenameSteps {
 
   static const String PATH_ACTIVITY = 'android/app/src/main/';
 
-  AndroidRenameSteps(this.newPackageName);
+  const AndroidRenameSteps({
+    required this.newPackageName,
+    this.updateActivityFiles = true,
+  });
 
   Future<void> process() async {
     print("Running for android");
@@ -23,24 +26,28 @@ class AndroidRenameSteps {
           '\n\nrun " flutter create . " to regenerate missing files.');
       return;
     }
-    String? contents = await readFileAsString(PATH_BUILD_GRADLE);
+    final contents = await readFileAsString(PATH_BUILD_GRADLE);
 
-    var reg = RegExp(r'applicationId\s*=?\s*"(.*)"', caseSensitive: true, multiLine: false);
-    var match = reg.firstMatch(contents!);
-    if(match == null) {
-      print('ERROR:: applicationId not found in build.gradle file, Please file an issue on github with $PATH_BUILD_GRADLE file attached.');
+    final reg = RegExp(r'applicationId\s*=?\s*"(.*)"', caseSensitive: true, multiLine: false);
+    final match = reg.firstMatch(contents!);
+    if (match == null) {
+      print('ERROR:: applicationId not found in build.gradle file, '
+          'Please file an issue on github with $PATH_BUILD_GRADLE file attached.');
       return;
     }
-    var name = match.group(1);
-    oldPackageName = name;
+
+    final oldPackageName = match.group(1) ?? '';
 
     print("Old Package Name: $oldPackageName");
 
     print('Updating build.gradle File');
-    await _replace(PATH_BUILD_GRADLE);
+    await _replace(
+      path: PATH_BUILD_GRADLE,
+      oldPackageName: oldPackageName,
+    );
 
-    var mText = 'package="$newPackageName">';
-    var mRegex = '(package=.*)';
+    final mText = 'package="$newPackageName">';
+    final mRegex = '(package=.*)';
 
     print('Updating Main Manifest file');
     await replaceInFileRegex(PATH_MANIFEST, mRegex, mText);
@@ -51,28 +58,29 @@ class AndroidRenameSteps {
     print('Updating Profile Manifest file');
     await replaceInFileRegex(PATH_MANIFEST_PROFILE, mRegex, mText);
 
-    await updateMainActivity();
+    if (updateActivityFiles) {
+      await _updateMainActivity();
+    }
     print('Finished updating android package name');
   }
 
-  Future<void> updateMainActivity() async {
-    var path = await findMainActivity(type: 'java');
+  Future<void> _updateMainActivity() async {
+    var path = await _findMainActivity(type: 'java');
     if (path != null) {
-      processMainActivity(path, 'java');
+      _processMainActivity(path, 'java');
     }
 
-    path = await findMainActivity(type: 'kotlin');
+    path = await _findMainActivity(type: 'kotlin');
     if (path != null) {
-      processMainActivity(path, 'kotlin');
+      _processMainActivity(path, 'kotlin');
     }
   }
 
-  Future<void> processMainActivity(File path, String type) async {
+  Future<void> _processMainActivity(File path, String type) async {
     var extension = type == 'java' ? 'java' : 'kt';
     print('Project is using $type');
     print('Updating MainActivity.$extension');
-    await replaceInFileRegex(
-        path.path, r'^(package (?:\.|\w)+)', "package ${newPackageName}");
+    await replaceInFileRegex(path.path, r'^(package (?:\.|\w)+)', "package ${newPackageName}");
 
     String newPackagePath = newPackageName.replaceAll('.', '/');
     String newPath = '${PATH_ACTIVITY}${type}/$newPackagePath';
@@ -83,15 +91,18 @@ class AndroidRenameSteps {
 
     print('Deleting old directories');
 
-    await deleteEmptyDirs(type);
+    await _deleteEmptyDirs(type);
   }
 
-  Future<void> _replace(String path) async {
+  Future<void> _replace({
+    required String path,
+    required String oldPackageName,
+  }) async {
     await replaceInFile(path, oldPackageName, newPackageName);
   }
 
-  Future<void> deleteEmptyDirs(String type) async {
-    var dirs = await dirContents(Directory(PATH_ACTIVITY + type));
+  Future<void> _deleteEmptyDirs(String type) async {
+    var dirs = await _dirContents(Directory(PATH_ACTIVITY + type));
     dirs = dirs.reversed.toList();
     for (var dir in dirs) {
       if (dir is Directory) {
@@ -102,8 +113,8 @@ class AndroidRenameSteps {
     }
   }
 
-  Future<File?> findMainActivity({String type = 'java'}) async {
-    var files = await dirContents(Directory(PATH_ACTIVITY + type));
+  Future<File?> _findMainActivity({String type = 'java'}) async {
+    var files = await _dirContents(Directory(PATH_ACTIVITY + type));
     String extension = type == 'java' ? 'java' : 'kt';
     for (var item in files) {
       if (item is File) {
@@ -115,8 +126,8 @@ class AndroidRenameSteps {
     return null;
   }
 
-  Future<List<FileSystemEntity>> dirContents(Directory dir) {
-    if(!dir.existsSync()) return Future.value([]);
+  Future<List<FileSystemEntity>> _dirContents(Directory dir) {
+    if (!dir.existsSync()) return Future.value([]);
     var files = <FileSystemEntity>[];
     var completer = Completer<List<FileSystemEntity>>();
     var lister = dir.list(recursive: true);
