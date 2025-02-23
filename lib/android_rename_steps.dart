@@ -18,17 +18,21 @@ class AndroidRenameSteps {
 
   Future<void> process() async {
     print("Running for android");
-    if (!await File(PATH_BUILD_GRADLE).exists()) {
+    var gradleFile = PATH_BUILD_GRADLE;
+    if(!await File(gradleFile).exists()) {
+      gradleFile = "$gradleFile.kts";
+    }
+    if (!await File(gradleFile).exists()) {
       print('ERROR:: build.gradle file not found, Check if you have a correct android directory present in your project'
           '\n\nrun " flutter create . " to regenerate missing files.');
       return;
     }
-    String? contents = await readFileAsString(PATH_BUILD_GRADLE);
+    String? contents = await readFileAsString(gradleFile);
 
     var reg = RegExp(r'applicationId\s*=?\s*"(.*)"', caseSensitive: true, multiLine: false);
     var match = reg.firstMatch(contents!);
     if(match == null) {
-      print('ERROR:: applicationId not found in build.gradle file, Please file an issue on github with $PATH_BUILD_GRADLE file attached.');
+      print('ERROR:: applicationId not found in build.gradle file, Please file an issue on github with $gradleFile file attached.');
       return;
     }
     var name = match.group(1);
@@ -37,7 +41,7 @@ class AndroidRenameSteps {
     print("Old Package Name: $oldPackageName");
 
     print('Updating build.gradle File');
-    await _replace(PATH_BUILD_GRADLE);
+    await _replace(gradleFile);
 
     var mText = 'package="$newPackageName">';
     var mRegex = '(package=.*)';

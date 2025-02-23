@@ -1,3 +1,7 @@
+## [1.5.0] - (February 23, 2025)
+
+* Add support for Flutter 3.29.0 for Android build.gradle.kts file structure.
+
 ## [1.4.0] - (September 20, 2024)
 
 * Specify which platform they want to rename the package for. Thanks [@moha-b](moha-b) #43
